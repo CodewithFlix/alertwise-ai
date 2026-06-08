@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "favicon:prepare": "node scripts/prepare-favicon.mjs",
+    "predev": "npm run favicon:prepare",
     "dev": "next dev",
+    "prebuild": "npm run favicon:prepare",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

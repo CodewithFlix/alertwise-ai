@@ -4,6 +4,7 @@ import {
   CheckCircle2,
   Clipboard,
   Copy,
+  Download,
   FileText,
   Gauge,
   ListChecks,
@@ -39,6 +40,22 @@ const severityStyles: Record<Severity, string> = {
   Medium: "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300",
   High: "border-orange-500/30 bg-orange-500/10 text-orange-700 dark:text-orange-300",
   Critical: "border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-300",
+}
+
+function downloadJson(result: TriageResultType) {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
+  const blob = new Blob([JSON.stringify(result, null, 2)], {
+    type: "application/json",
+  })
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement("a")
+
+  anchor.href = url
+  anchor.download = `alertwise-triage-${timestamp}.json`
+  document.body.appendChild(anchor)
+  anchor.click()
+  anchor.remove()
+  URL.revokeObjectURL(url)
 }
 
 function Section({
@@ -79,15 +96,28 @@ export function TriageResult({
             </CardTitle>
             <CardDescription>{result.summary}</CardDescription>
           </div>
-          <Badge
-            variant="outline"
-            className={cn(
-              "w-fit rounded-md px-3 py-1 text-sm font-semibold",
-              severityStyles[result.severity]
-            )}
-          >
-            {result.severity}
-          </Badge>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => downloadJson(result)}
+              title="Download triage result as JSON"
+              className="rounded-md"
+            >
+              <Download />
+              Download JSON
+            </Button>
+            <Badge
+              variant="outline"
+              className={cn(
+                "w-fit rounded-md px-3 py-1 text-sm font-semibold",
+                severityStyles[result.severity]
+              )}
+            >
+              {result.severity}
+            </Badge>
+          </div>
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">

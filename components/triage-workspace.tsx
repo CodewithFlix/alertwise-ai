@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AlertTriangle, Bot, Shield, Sparkles } from "lucide-react"
 
 import { AlertInput } from "@/components/alert-input"
@@ -18,6 +18,11 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import type { SampleAlert, TriageResult as TriageResultType } from "@/lib/types"
 
+type ProviderStatus = {
+  configured: boolean
+  message: string
+}
+
 export function TriageWorkspace() {
   const [alertText, setAlertText] = useState("")
   const [selectedSampleId, setSelectedSampleId] = useState<string>()
@@ -25,6 +30,48 @@ export function TriageWorkspace() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [copied, setCopied] = useState(false)
+  const [providerStatus, setProviderStatus] = useState<ProviderStatus>({
+    configured: false,
+    message: "Checking model endpoint...",
+  })
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadProviderStatus() {
+      try {
+        const response = await fetch("/api/provider-status", {
+          cache: "no-store",
+        })
+        const payload = await response.json()
+
+        if (!isMounted) {
+          return
+        }
+
+        setProviderStatus({
+          configured: Boolean(payload?.configured),
+          message:
+            typeof payload?.message === "string"
+              ? payload.message
+              : "Model endpoint not configured",
+        })
+      } catch {
+        if (isMounted) {
+          setProviderStatus({
+            configured: false,
+            message: "Model endpoint not configured",
+          })
+        }
+      }
+    }
+
+    loadProviderStatus()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   async function copyText(text: string) {
     try {
@@ -180,6 +227,7 @@ export function TriageWorkspace() {
                 <AlertInput
                   value={alertText}
                   isLoading={isLoading}
+                  providerStatus={providerStatus}
                   onChange={(value) => {
                     setAlertText(value)
                     setSelectedSampleId(undefined)
@@ -248,7 +296,7 @@ export function TriageWorkspace() {
                       "Severity badge",
                       "Confidence score",
                       "MITRE techniques",
-                      "Copyable report",
+                      "Download JSON",
                     ].map((item) => (
                       <div
                         key={item}
