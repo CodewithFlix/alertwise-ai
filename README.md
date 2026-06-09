@@ -107,9 +107,9 @@ The working AI agent submitted for this project is **Alertwise.Ai**, not GitHub 
 
 The API route requires Azure OpenAI or Microsoft Foundry-compatible environment variables.
 
-There is no local demo triage fallback in the current MVP. Analysis runs only through the configured model endpoint.
+For the Reasoning Agents challenge, Alertwise.Ai is designed to use a Microsoft Foundry or Azure OpenAI-compatible model endpoint.
 
-Create a `.env.local` file by copying `.env.example`:
+Create a `.env.local` file from `.env.example`:
 
 ```bash
 cp .env.example .env.local
