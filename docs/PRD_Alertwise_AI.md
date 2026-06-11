@@ -237,7 +237,7 @@ The final report should be concise and structured so that an analyst can copy it
 
 ## 9. Functional Requirements
 
-| ID | Requirement | Priority |
+| ID     | Requirement | Priority |
 |---|---|---|
 | FR-001 | User can paste security alert text into the application. | Must Have |
 | FR-002 | User can select a sample alert. | Must Have |

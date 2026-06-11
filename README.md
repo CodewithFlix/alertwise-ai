@@ -219,13 +219,22 @@ npm run build
 
 ---
 
-## Safety Notice
+## Live Demo Walkthrough
 
-Alertwise.Ai supports **initial defensive triage only**.
+1. Open the deployed Alertwise.Ai application.
+2. Select one of the synthetic sample alerts, such as Suspicious PowerShell Execution.
+3. Click **Analyze Alert**.
+4. Review the AI-generated triage output:
+   - Severity and confidence
+   - MITRE ATT&CK mapping
+   - Suspicious indicators
+   - Reasoning
+   - Recommended response actions
+   - False positive considerations
+   - SOC-style final report
+5. Copy the final report into a ticket or case note.
 
-AI-generated analysis must be validated by a human security analyst using trusted telemetry before any containment, escalation, disciplinary action, legal action, or case closure.
-
-The application should not be used as the sole source of truth for security decisions.
+No real customer data or confidential telemetry should be submitted. Use synthetic or sanitized alerts only.
 
 ---
 
